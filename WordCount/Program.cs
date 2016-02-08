@@ -10,44 +10,51 @@ namespace WordCount
     {
         private static void Main(string[] args)
         {
-            if (args.Length < 1)
+            try
             {
-                Console.WriteLine("Please use path to file as an argument");
-                return;
-            }
-
-            var path = args[0];
-
-            if (!File.Exists(path))
-            {
-                Console.WriteLine("File {0} doesn't exist", path);
-                return;
-            }
-            
-            var rawText = File.ReadAllText(path);
-            var lowercaseText = rawText.ToLowerInvariant();
-            var textWithoutPunctuation = RemovePunctuation(lowercaseText);
-            var words = textWithoutPunctuation.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            var wordsOccurence = new Dictionary<string, int>();
-
-            foreach (var word in words)
-            {
-                if (wordsOccurence.ContainsKey(word))
+                if (args.Length < 1)
                 {
-                    wordsOccurence[word]++;
+                    Console.WriteLine("Please use path to file as an argument");
+                    return;
                 }
-                else
+
+                var path = args[0];
+
+                if (!File.Exists(path))
                 {
-                    wordsOccurence.Add(word, 1);
+                    Console.WriteLine("File {0} doesn't exist", path);
+                    return;
+                }
+
+                var rawText = File.ReadAllText(path);
+                var lowercaseText = rawText.ToLowerInvariant();
+                var textWithoutPunctuation = RemovePunctuation(lowercaseText);
+                var words = textWithoutPunctuation.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                var wordsOccurence = new Dictionary<string, int>();
+
+                foreach (var word in words)
+                {
+                    if (wordsOccurence.ContainsKey(word))
+                    {
+                        wordsOccurence[word]++;
+                    }
+                    else
+                    {
+                        wordsOccurence.Add(word, 1);
+                    }
+                }
+
+                var orderedWords = wordsOccurence.OrderByDescending(x => x.Value).ToList();
+
+                foreach (var orderedWord in orderedWords)
+                {
+                    Console.WriteLine("{0} - {1}", orderedWord.Key, orderedWord.Value);
                 }
             }
-
-            var orderedWords = wordsOccurence.OrderByDescending(x => x.Value).ToList();
-
-            foreach (var orderedWord in orderedWords)
+            catch (Exception ex)
             {
-                Console.WriteLine("{0} - {1}", orderedWord.Key, orderedWord.Value);
+                Console.WriteLine("Oops, something went wrong: " + ex.Message);
             }
         }
 
