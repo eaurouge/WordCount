@@ -38,7 +38,7 @@ namespace WordCount
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var character in source)
             {
-                var charToAppend = Char.IsLetter(character) ? character : ' ';
+                var charToAppend = char.IsLetter(character) ? character : ' ';
                 result.Append(charToAppend);
             }
 
