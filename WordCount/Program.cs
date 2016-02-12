@@ -27,24 +27,7 @@ namespace WordCount
                 }
 
                 var rawText = File.ReadAllText(path);
-                var lowercaseText = rawText.ToLowerInvariant();
-                var textWithoutPunctuation = RemovePunctuation(lowercaseText);
-                var words = textWithoutPunctuation.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                var wordsOccurence = new Dictionary<string, int>();
-
-                foreach (var word in words)
-                {
-                    if (wordsOccurence.ContainsKey(word))
-                    {
-                        wordsOccurence[word]++;
-                    }
-                    else
-                    {
-                        wordsOccurence.Add(word, 1);
-                    }
-                }
-
+                var wordsOccurence = WordCounter.CalculateWordsOccurence(rawText);
                 var orderedWords = wordsOccurence.OrderByDescending(x => x.Value).ToList();
 
                 foreach (var orderedWord in orderedWords)
@@ -56,20 +39,6 @@ namespace WordCount
             {
                 Console.WriteLine("Oops, something went wrong: " + ex.Message);
             }
-        }
-
-        private static string RemovePunctuation(string source)
-        {
-            var result = new StringBuilder();
-
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var character in source)
-            {
-                var charToAppend = char.IsLetter(character) ? character : ' ';
-                result.Append(charToAppend);
-            }
-
-            return result.ToString();
         }
     }
 }
